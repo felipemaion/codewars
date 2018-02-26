@@ -2473,3 +2473,39 @@ test.assert_equals(big_primefac_div(-1800.1), "The number has a decimal part. No
 
 
 
+# https://www.codewars.com/kata/tracking-hits-for-different-sum-values-for-different-kinds-of-dice
+
+
+comment("Find All the Possible Numbers Multiple of 3 with the Digits of a Positive Integer. ")
+# https://www.codewars.com/kata/find-all-the-possible-numbers-multiple-of-3-with-the-digits-of-a-positive-integer/train/python
+from itertools import permutations, combinations
+
+def find_mult_3(number):
+    number = list(str(number))
+    candidates, output = [], []
+    # Find all combinations mult. of 3.
+    for i in range(1, len(number) + 1):
+        candidates.append(["".join(a) for a in combinations(number, i)
+                           if int("".join(list(a))) % 3 == 0 and int("".join(list(a))) != 0])
+    # Remove subitems [[], [[],[],[],[]],[]] -> Flatten:
+    candidates = [item for sublist in candidates for item in sublist]
+    # Now permute those numbers to get all numbers.
+    for candidate in candidates:
+        c = str(candidate)
+        output.append(["".join(list(a)) for a in permutations(c, len(c))])
+    # Flatten list:
+    output = [int(item) for sublist in output for item in sublist]
+    # Remove Duplicates:
+    output = list(set(output))
+    return [len(output), max(output)]
+
+test.describe("Basic Test")
+
+test.assert_equals(find_mult_3(362), [4, 63])
+test.assert_equals(find_mult_3(6063), [25, 6630])
+test.assert_equals(find_mult_3(7766553322), [55510, 766553322])
+
+
+#########################################
+
+
